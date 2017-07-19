@@ -8,9 +8,9 @@
  <param>
     <name>target</name>
     <key>target</key>
-    <type>string</type>
     <value>uhd_usrp_source_0</value>
-  </param>
+    <type>string</type>
+ </param>
  <sink>
     <name>pdus</name>
     <type>message</type>
