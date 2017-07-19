@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <block>
-  <name>gps_probe_e310</name>
+  <name>GPS Probe E310</name>
   <key>uhdgps_gps_probe_e310</key>
-  <category>[uhdgps]</category>
+  <category>uhdgps</category>
   <import>import uhdgps</import>
   <make>uhdgps.gps_probe_e310(self, $target)</make>
  <param>
