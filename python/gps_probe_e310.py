@@ -53,7 +53,7 @@ class gps_probe_e310(gr.sync_block):
         (ometa, data) = (pmt.to_python(pmt.car(pdu)), pmt.cdr(pdu))
         
         d = {}
-        gps_log = open("self.gps.log","r")
+        gps_log = open("self.gps_log","r")
         try:
             # grab all mboard sensor data
             uhd_source = eval("self.parent.%s"%(self.target))
