@@ -60,10 +60,10 @@ class gps_probe_e310(gr.sync_block):
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
             d["gps_location"] = str(self.gps_log.readlines()[-1])
-        except AttributeError:
+       except AttributeError:
             d["gps_present"] = False
         
-        ometa.update( d )
-        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
+       ometa.update( d )
+       self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
 
 
