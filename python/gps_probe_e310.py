@@ -46,7 +46,7 @@ class gps_probe_e310(gr.sync_block):
     def work(self, input_items, output_items):
         assert(False)
 
-    def handler(self pdu):
+    def handler(self, pdu):
        (ometa, data) = (pmt.to_python(pmt.car(pdu)), pmt.cdr(pdu))
 
        d = {}
