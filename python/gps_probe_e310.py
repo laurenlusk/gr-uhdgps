@@ -33,6 +33,8 @@ class gps_probe_e310(gr.sync_block):
             name="gps_probe_e310",
             in_sig=[],
             out_sig=[])
+        self.parent = parent
+        self.target = target
         self.message_port_register_in(pmt.intern("pdus"))
         self.message_port_register_out(pmt.intern("pdus"))
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
