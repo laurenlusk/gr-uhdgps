@@ -49,21 +49,21 @@ class gps_probe_e310(gr.sync_block):
     def handler(self, pdu):
         (ometa, data) = (pmt.to_python(pmt.car(pdu)), pmt.cdr(pdu))
 
-       d = {}
-       try:
-           # grab all mboard sensor data
-           uhd_source = eval("self.parent.%s"%(self.target))
-           mbs = uhd_source.get_mboard_sensor_names()
-           for k in mbs:
-               v = uhd_source.get_mboard_sensor(k)
-               d[k] = v.value
-           d["gain"] = uhd_source.get_gain()
-           d["gps_present"] = True
-           d["gps_location"] = str(self.gps_log.readlines()[-1])
-       except AttributeError:
-           d["gps_present"] = False
+        d = {}
+        try:
+            # grab all mboard sensor data
+            uhd_source = eval("self.parent.%s"%(self.target))
+            mbs = uhd_source.get_mboard_sensor_names()
+            for k in mbs:
+                v = uhd_source.get_mboard_sensor(k)
+                d[k] = v.value
+            d["gain"] = uhd_source.get_gain()
+            d["gps_present"] = True
+            d["gps_location"] = str(self.gps_log.readlines()[-1])
+        except AttributeError:
+            d["gps_present"] = False
         
-       ometa.update( d )
-       self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
+        ometa.update( d )
+        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
 
 
