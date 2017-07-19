@@ -60,8 +60,8 @@ class gps_probe_e310(gr.sync_block):
             for k in mbs:
                 v = uhd_source.get_mboard_sensor(k)
                 d[k] = v.value
-            d["gps_location"] = str(self.gps_log.readlines()[-1])
-	    #print self.gps_log.readline()
+            #d["gps_location"] = str(self.gps_log.readlines()[-1])
+	    print str(self.gps_log.readlines()[-1])
 	    #d["gps_location"] = str(subprocess.check_output['tail','-1', self.gps_log_path])
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
