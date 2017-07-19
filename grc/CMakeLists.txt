@@ -21,5 +21,5 @@ install(FILES
     uhdgps_gps_probe.xml
     uhdgps_meta_to_json_file.xml
     uhdgps_cpdu_average_power.xml
-    DESTINATION share/gnuradio/grc/blocks
+    uhdgps_gps_probe_e310.xml DESTINATION share/gnuradio/grc/blocks
 )

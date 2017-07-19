@@ -34,7 +34,7 @@ GR_PYTHON_INSTALL(
     meta_to_json_file.py
     cpdu_average_power.py
     __init__.py
-    DESTINATION ${GR_PYTHON_DIR}/uhdgps
+    gps_probe_e310.py DESTINATION ${GR_PYTHON_DIR}/uhdgps
 )
 
 ########################################################################
@@ -44,3 +44,4 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-uhdgps)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+GR_ADD_TEST(qa_gps_probe_e310 ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gps_probe_e310.py)

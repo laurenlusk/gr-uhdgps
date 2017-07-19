@@ -52,6 +52,7 @@ except ImportError:
 	pass
 
 # import any pure python here
+from gps_probe_e310 import gps_probe_e310
 #
 
 # ----------------------------------------------------------------
