@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<block>
+  <name>gps_probe_e310</name>
+  <key>uhdgps_gps_probe_e310</key>
+  <category>[uhdgps]</category>
+  <import>import uhdgps</import>
+  <make>uhdgps.gps_probe_e310(self, $target)</make>
+ <param>
+    <name>target</name>
+    <key>target</key>
+    <type>string</type>
+    <value>uhd_usrp_source_0</value>
+  </param>
+ <sink>
+    <name>pdus</name>
+    <type>message</type>
+  </sink>
+ <source>
+    <name>pdus</name>
+    <type>message</type>
+  </source>
+</block>
