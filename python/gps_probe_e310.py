@@ -62,7 +62,7 @@ class gps_probe_e310(gr.sync_block):
                 d[k] = v.value
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
-            d["gps_location"] = str(self.gps_log.readlines()[-1])
+            #d["gps_location"] = str(self.gps_log.readlines()[-1])
         except AttributeError:
             d["gps_present"] = False
         
