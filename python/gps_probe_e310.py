@@ -40,7 +40,7 @@ class gps_probe_e310(gr.sync_block):
         self.message_port_register_out(pmt.intern("pdus"))
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
         (self.gps_log, self.gps_log_path) = tempfile.mkstemp()
-        subprocess.Popen("gpspipe -r -o " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
+        subprocess.Popen("gpspipe -r -o -d " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
 
     def __del__(self):
         close(self.gps_log)
@@ -60,8 +60,8 @@ class gps_probe_e310(gr.sync_block):
             for k in mbs:
                 v = uhd_source.get_mboard_sensor(k)
                 d[k] = v.value
-            #d["gps_location"] = str(gps_log.readlines()[-1])
-	    d["gps_location"] = str(subprocess.check_output['tail','-1', self.gps_log_path])
+            d["gps_location"] = str(gps_log.readlines()[-1])
+	    #d["gps_location"] = str(subprocess.check_output['tail','-1', self.gps_log_path])
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
             
