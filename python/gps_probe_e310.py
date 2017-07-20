@@ -68,9 +68,6 @@ class gps_probe_e310(gr.sync_block):
         except AttributeError:
             d["gps_present"] = False
 
-        ometa.update( d )
-        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
-
         try:
             for new_data in gpsd_socket:
                 if new_data:
@@ -78,13 +75,15 @@ class gps_probe_e310(gr.sync_block):
                 else:
                     break
                 if data_stream.TPV['lat'] != 'n/a':
-                    print 'Latitude: ',data_stream.TPV['lat']
-                    print 'Longitude: ', data_stream.TPV['lon']
+                    d['Latitude'] = data_stream.TPV['lat']
+                    d['Longitude'] = data_stream.TPV['lon']
 
         except KeyboardInterrupt:
             gpsd_socket.close()
 
         #print "Almost a tag..."
+        ometa.update(d)
+        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
 
 
 
