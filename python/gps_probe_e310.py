@@ -50,10 +50,10 @@ class gps_probe_e310(gr.sync_block):
 
         d = {}
 
-        gpsd_socket = gps3.GPSDSocket()
+        gpsd_socket = agps3.GPSDSocket()
         gpsd_socket.connect()
         gpsd_socket.watch()
-        data_stream = gps3.DataStream()
+        data_stream = agps3.DataStream()
 
         try:
             # grab all mboard sensor data
@@ -69,8 +69,8 @@ class gps_probe_e310(gr.sync_block):
                 if new_data:
                     data_stream.unpack(new_data)
                 if data_stream.TPV['lat'] != 'n/a':
-                    d['Latitude'] = data_stream.TPV['lat']
-                    d['Longitude'] = data_stream.TPV['lon']
+                    d['Latitude'] = data_stream.lat
+                    d['Longitude'] = data_stream.lon
                     ometa.update(d)
                     self.message_port_pub(pmt.intern("pdus"),pmt.const(pmt.to_pmt(ometa), data))
 
