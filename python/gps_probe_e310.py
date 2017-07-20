@@ -68,6 +68,10 @@ class gps_probe_e310(gr.sync_block):
         except AttributeError:
             d["gps_present"] = False
 
+        ometa.update( d )
+        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
+        print "message sent"
+
         try:
             for new_data in gpsd_socket:
                 if new_data:
@@ -80,8 +84,6 @@ class gps_probe_e310(gr.sync_block):
             gpsd_socket.close()
 
         #print "Almost a tag..."
-        ometa.update( d )
-        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
-        print "message sent"
+
 
 
