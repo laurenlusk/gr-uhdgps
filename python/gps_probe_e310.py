@@ -48,6 +48,7 @@ class gps_probe_e310(gr.sync_block):
     def handler(self, pdu):
         (ometa, data) = (pmt.to_python(pmt.car(pdu)), pmt.cdr(pdu))
 
+        num_iters = 0
         d = {}
 
         gpsd_socket = gps3.GPSDSocket()
@@ -72,13 +73,14 @@ class gps_probe_e310(gr.sync_block):
         self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
 
         try:
-            print len(gpsd_socket)
             for new_data in gpsd_socket:
+                num_iters += 1
                 if new_data:
                     data_stream.unpack(new_data)
                 if data_stream.TPV['lat'] != 'n/a':
                     print 'Latitude: ',data_stream.TPV['lat']
                     print 'Longitude: ', data_stream.TPV['lon']
+                print "There are ", num_iters, " iterations."
 
         except KeyboardInterrupt:
             gpsd_socket.close()
