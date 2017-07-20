@@ -24,7 +24,7 @@ import pmt
 import subprocess
 import time
 import tempfile
-from gps3 import gps3
+from gps3 import *
 
 class gps_probe_e310(gr.sync_block):
     """
