@@ -74,7 +74,6 @@ class gps_probe_e310(gr.sync_block):
             gps_socket.connect()
             gps_socket.watch()
             for new_data in gps_socket:
-                print "new data exists?"
                 if new_data:
                     print "hullo thar"
                     data_stream.unpack(new_data)
