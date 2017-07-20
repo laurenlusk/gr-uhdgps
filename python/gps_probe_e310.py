@@ -71,12 +71,14 @@ class gps_probe_e310(gr.sync_block):
                 if data_stream.TPV['lat'] != 'n/a':
                     d['Latitude'] = data_stream.TPV['lat']
                     d['Longitude'] = data_stream.TPV['lon']
-    
+                    ometa.update(d)
+                    self.message_port_pub(pmt.intern("pdus"),pmt.const(pmt.to_pmt(ometa), data))
+
         except AttributeError:
             d["gps_present"] = False
 
-        print "Almost a tag..."
-        ometa.update( d )
-        self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
+        #print "Almost a tag..."
+        #ometa.update( d )
+        #self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
 
 
