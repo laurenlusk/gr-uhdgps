@@ -69,16 +69,16 @@ class gps_probe_e310(gr.sync_block):
 
             print "I am normal"
 
-           gps_socket = agps3.GPSDSocket()
-           data_stream = agps3.DataStream()
-           gps_socket.connect()
-           gps_socket.watch()
-           for new_data in gps_socket:
-               print "new data exists?"
-               if new_data:
-                   print "hullo thar"
-                   data_stream.unpack(new_data)
-                   print 'Latitude = ', data_stream.lat
+    #       gps_socket = agps3.GPSDSocket()
+    #       data_stream = agps3.DataStream()
+    #       gps_socket.connect()
+    #       gps_socket.watch()
+    #       for new_data in gps_socket:
+    #           print "new data exists?"
+    #           if new_data:
+    #               print "hullo thar"
+    #               data_stream.unpack(new_data)
+    #               print 'Latitude = ', data_stream.lat
     
         except AttributeError:
             d["gps_present"] = False
