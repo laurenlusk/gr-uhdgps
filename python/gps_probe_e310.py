@@ -73,9 +73,10 @@ class gps_probe_e310(gr.sync_block):
 
         try:
             for new_data in gpsd_socket:
-                print "New Data:", new_data
                 if new_data:
                     data_stream.unpack(new_data)
+                else:
+                    break
                 if data_stream.TPV['lat'] != 'n/a':
                     print 'Latitude: ',data_stream.TPV['lat']
                     print 'Longitude: ', data_stream.TPV['lon']
