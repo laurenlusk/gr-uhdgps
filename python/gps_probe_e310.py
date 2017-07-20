@@ -41,12 +41,6 @@ class gps_probe_e310(gr.sync_block):
         self.message_port_register_in(pmt.intern("pdus"))
         self.message_port_register_out(pmt.intern("pdus"))
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
-       # (self.gps_log, self.gps_log_path) = tempfile.mkstemp()
-       # subprocess.Popen("gpspipe -r -o -d " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
-
-    #def __del__(self):
-    #    close(self.gps_log)
-    #    # delete the log for security and space
 
     def work(self, input_items, output_items):
         assert(False)
@@ -68,18 +62,14 @@ class gps_probe_e310(gr.sync_block):
             for k in mbs:
                 v = uhd_source.get_mboard_sensor(k)
                 d[k] = v.value
-            #d["gps_location"] = str(self.gps_log.readlines()[-1])
-	        # d["gps_location"] = str(subprocess.check_output['tail','-n','1', self.gps_log_path])
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
 
-            print "I am normal"
-
             for new_data in gpsd_socket:
-                if new_data:
-                    print "hullo thar"
+                if new_data%500:
                     data_stream.unpack(new_data)
-                    print 'Latitude = ', data_stream.TPV['lat']
+                    d['Latitude'] = data_stream.TPV['lat']
+                    d['Longitude'] = data_stream.TPV['lon']
     
         except AttributeError:
             d["gps_present"] = False
