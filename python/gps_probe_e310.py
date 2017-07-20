@@ -79,7 +79,7 @@ class gps_probe_e310(gr.sync_block):
                 if new_data:
                     print "hullo thar"
                     data_stream.unpack(new_data)
-                    print 'Latitude = ', data_stream.lat
+                    print 'Latitude = ', data_stream.TPV['lat']
     
         except AttributeError:
             d["gps_present"] = False
