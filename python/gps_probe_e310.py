@@ -43,9 +43,9 @@ class gps_probe_e310(gr.sync_block):
        # (self.gps_log, self.gps_log_path) = tempfile.mkstemp()
        # subprocess.Popen("gpspipe -r -o -d " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
 
-    def __del__(self):
-        close(self.gps_log)
-        # delete the log for security and space
+    #def __del__(self):
+    #    close(self.gps_log)
+    #    # delete the log for security and space
 
     def work(self, input_items, output_items):
         assert(False)
