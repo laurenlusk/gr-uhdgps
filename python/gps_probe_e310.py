@@ -50,10 +50,10 @@ class gps_probe_e310(gr.sync_block):
 
         d = {}
 
-        gpsd_socket = agps3.GPSDSocket()
+        gpsd_socket = gps3.GPSDSocket()
         gpsd_socket.connect()
         gpsd_socket.watch()
-        data_stream = agps3.DataStream()
+        data_stream = gps3.DataStream()
 
         try:
             # grab all mboard sensor data
@@ -69,11 +69,11 @@ class gps_probe_e310(gr.sync_block):
                 if new_data:
                     data_stream.unpack(new_data)
                 if data_stream.TPV['lat'] != 'n/a':
-                    print data_stream.lat
-                    print data_stream.lon
+                    print 'Latitude: ',data_stream.TPV['lat']
+                    print 'Longitude: ', data_stream.TPV['lon']
                     ometa.update(d)
                     self.message_port_pub(pmt.intern("pdus"),pmt.const(pmt.to_pmt(ometa), data))
-                    print "message sent"
+                    print 'message sent'
 
         except AttributeError:
             d["gps_present"] = False
