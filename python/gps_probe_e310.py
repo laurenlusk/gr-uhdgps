@@ -75,6 +75,7 @@ class gps_probe_e310(gr.sync_block):
             for new_data in gps_socket:
                 print "new data exists?"
                 if new_data:
+                    print "hullo thar"
                     data_stream.unpack(new_data)
                     print 'Latitude = ', data_stream.lat
 
