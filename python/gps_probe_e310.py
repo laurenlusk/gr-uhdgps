@@ -55,6 +55,12 @@ class gps_probe_e310(gr.sync_block):
         (ometa, data) = (pmt.to_python(pmt.car(pdu)), pmt.cdr(pdu))
 
         d = {}
+
+        gpsd_socket = gps3.GPSDSocket()
+        gpsd_socket.connect()
+        gpsd_socket.watch()
+        data_stream = gps3.DataStream()
+
         try:
             # grab all mboard sensor data
             uhd_source = eval("self.parent.%s"%(self.target))
@@ -69,11 +75,7 @@ class gps_probe_e310(gr.sync_block):
 
             print "I am normal"
 
-            gps_socket = agps3.GPSDSocket()
-            data_stream = agps3.DataStream()
-            gps_socket.connect()
-            gps_socket.watch()
-            for new_data in gps_socket:
+            for new_data in gpsd_socket:
                 if new_data:
                     print "hullo thar"
                     data_stream.unpack(new_data)
