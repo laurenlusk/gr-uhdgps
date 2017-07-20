@@ -51,9 +51,9 @@ class gps_probe_e310(gr.sync_block):
         d = {}
 
         gpsd_socket = gps3.GPSDSocket()
+        data_stream = gps3.DataStream()
         gpsd_socket.connect()
         gpsd_socket.watch()
-        data_stream = gps3.DataStream()
 
         try:
             # grab all mboard sensor data
@@ -70,9 +70,9 @@ class gps_probe_e310(gr.sync_block):
 
         ometa.update( d )
         self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
-        print "message sent"
 
         try:
+            print len(gpsd_socket)
             for new_data in gpsd_socket:
                 if new_data:
                     data_stream.unpack(new_data)
