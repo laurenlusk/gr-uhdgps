@@ -73,9 +73,9 @@ class gps_probe_e310(gr.sync_block):
             gps_socket.connect()
             gps_socket.watch()
             for new_data in gps_socket:
+                print "new data exists?"
                 if new_data:
                     data_stream.unpack(new_data)
-                    print "hello there, stranger"
                     print 'Latitude = ', data_stream.lat
 
         except AttributeError:
