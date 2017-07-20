@@ -24,6 +24,7 @@ import pmt
 import subprocess
 import time
 import tempfile
+from gps3 import gps3
 
 class gps_probe_e310(gr.sync_block):
     """
@@ -39,8 +40,8 @@ class gps_probe_e310(gr.sync_block):
         self.message_port_register_in(pmt.intern("pdus"))
         self.message_port_register_out(pmt.intern("pdus"))
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
-        (self.gps_log, self.gps_log_path) = tempfile.mkstemp()
-        subprocess.Popen("gpspipe -r -o -d " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
+       # (self.gps_log, self.gps_log_path) = tempfile.mkstemp()
+       # subprocess.Popen("gpspipe -r -o -d " + self.gps_log_path  + " -t | grep GPGGA", shell=True)
 
     def __del__(self):
         close(self.gps_log)
@@ -61,9 +62,18 @@ class gps_probe_e310(gr.sync_block):
                 v = uhd_source.get_mboard_sensor(k)
                 d[k] = v.value
             #d["gps_location"] = str(self.gps_log.readlines()[-1])
-	    d["gps_location"] = str(subprocess.check_output['tail','-n','1', self.gps_log_path])
+	   # d["gps_location"] = str(subprocess.check_output['tail','-n','1', self.gps_log_path])
             d["gain"] = uhd_source.get_gain()
             d["gps_present"] = True
+
+	    gps_socket = gps3.GPSDSocket()
+	    data_stream = gps3.DataStream()
+	    gps_socket.connect()
+	    gps_socket.watch()
+	    for new_data in gps_socket:
+	        if new_data:
+		    data_stream.unpack(new_data)
+		    d["gps_location"] = data_stream.TPV['lat']
             
         except AttributeError:
             d["gps_present"] = False
