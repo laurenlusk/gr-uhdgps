@@ -24,8 +24,8 @@ import pmt
 import subprocess
 import time
 import tempfile
+from datetime import datetime
 from gps3 import gps3
-from gps3 import agps3
 
 class gps_probe_e310(gr.sync_block):
     """
@@ -41,6 +41,12 @@ class gps_probe_e310(gr.sync_block):
         self.message_port_register_in(pmt.intern("pdus"))
         self.message_port_register_out(pmt.intern("pdus"))
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
+        self.lat = ""
+        self.lon = ""
+
+        time = datetime.now()
+        self.prev_time = time.seconds()
+        self.curr_time = 0
 
     def work(self, input_items, output_items):
         assert(False)
@@ -68,22 +74,43 @@ class gps_probe_e310(gr.sync_block):
         except AttributeError:
             d["gps_present"] = False
 
-        try:
-            for new_data in gpsd_socket:
-                if new_data:
-                    data_stream.unpack(new_data)
-                else:
-                    break
-                if data_stream.TPV['lat'] != 'n/a':
-                    d['Latitude'] = data_stream.TPV['lat']
-                    d['Longitude'] = data_stream.TPV['lon']
+        if self.curr_time == 0:
+            try:
+                for new_data in gpsd_socket:
+                    if new_data:
+                        data_stream.unpack(new_data)
+                    if data_stream.TPV['lat'] != 'n/a':
+                        d['Latitude'] = data_stream.TPV['lat']
+                        d['Longitude'] = data_stream.TPV['lon']
+                        self.lat = data_stream.TPV['lat']
+                        self.lon = data_stream.TPV['lat']
+                        self.curr_time = self.prev_time
+                        break
 
-        except KeyboardInterrupt:
-            gpsd_socket.close()
+            except KeyboardInterrupt:
+                gpsd_socket.close()
+        else:
+            time = datetime.now()
+            self.curr_time = time.seconds()
 
-        #print "Almost a tag..."
+        if self.prev_time == self.curr_time:
+            d['Latitude'] = self.lat
+            d['Longitude'] = self.lon
+        else:
+            try:
+                for new_data in gpsd_socket:
+                    if new_data:
+                        data_stream.unpack(new_data)
+                    if data_stream.TPV['lat'] != 'n/a':
+                        d['Latitude'] = data_stream.TPV['lat']
+                        d['Longitude'] = data_stream.TPV['lon']
+                        self.lat = data_stream.TPV['lat']
+                        self.lon = data_stream.TPV['lat']
+                        self.prev_time = self.curr_time
+                        break
+
+            except KeyboardInterrupt:
+                gpsd_socket.close()
+
         ometa.update(d)
         self.message_port_pub(pmt.intern("pdus"), pmt.cons(pmt.to_pmt(ometa), data))
-
-
-
