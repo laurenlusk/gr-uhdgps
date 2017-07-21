@@ -88,6 +88,9 @@ class gps_probe_e310(gr.sync_block):
 
             except KeyboardInterrupt:
                 gpsd_socket.close()
+        else:
+            d['Latitude'] = self.lat
+            d['Longitude'] = self.lon
 
 
         ometa.update(d)
