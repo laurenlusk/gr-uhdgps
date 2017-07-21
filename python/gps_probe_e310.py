@@ -43,9 +43,6 @@ class gps_probe_e310(gr.sync_block):
         self.lat = ""
         self.lon = ""
 
-        # time = datetime.now()
-        # self.prev_time = time.second()
-        # self.curr_time = 0
 
     def work(self, input_items, output_items):
         assert(False)
