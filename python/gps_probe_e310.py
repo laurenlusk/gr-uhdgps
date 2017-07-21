@@ -42,6 +42,8 @@ class gps_probe_e310(gr.sync_block):
         self.set_msg_handler(pmt.intern("pdus"), self.handler)
         self.lat = ""
         self.lon = ""
+        self.prev_time = time.time()
+        self.curr_time = time.time()
 
 
     def work(self, input_items, output_items):
@@ -56,6 +58,7 @@ class gps_probe_e310(gr.sync_block):
         data_stream = gps3.DataStream()
         gpsd_socket.connect()
         gpsd_socket.watch()
+        self.curr_time = time.time()
 
         try:
             # grab all mboard sensor data
@@ -70,20 +73,21 @@ class gps_probe_e310(gr.sync_block):
         except AttributeError:
             d["gps_present"] = False
 
-        try:
-            for new_data in gpsd_socket:
-                if new_data:
-                    data_stream.unpack(new_data)
-                if data_stream.TPV['lat'] != 'n/a':
-                    d['Latitude'] = data_stream.TPV['lat']
-                    d['Longitude'] = data_stream.TPV['lon']
-                    self.lat = data_stream.TPV['lat']
-                    self.lon = data_stream.TPV['lat']
-                    time.sleep(1)
-                    break
+        if self.curr_time - self.prev_time >= 1:
+            try:
+                for new_data in gpsd_socket:
+                    if new_data:
+                        data_stream.unpack(new_data)
+                    if data_stream.TPV['lat'] != 'n/a':
+                        d['Latitude'] = data_stream.TPV['lat']
+                        d['Longitude'] = data_stream.TPV['lon']
+                        self.lat = data_stream.TPV['lat']
+                        self.lon = data_stream.TPV['lat']
+                        self.prev_time = self.curr_time
+                        break
 
-        except KeyboardInterrupt:
-            gpsd_socket.close()
+            except KeyboardInterrupt:
+                gpsd_socket.close()
 
 
         ometa.update(d)
