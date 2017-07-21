@@ -22,7 +22,6 @@
 from gnuradio import gr
 import pmt
 import subprocess
-import time
 import tempfile
 from datetime import datetime
 from gps3 import gps3
@@ -45,7 +44,7 @@ class gps_probe_e310(gr.sync_block):
         self.lon = ""
 
         time = datetime.now()
-        self.prev_time = time.seconds()
+        self.prev_time = time.second()
         self.curr_time = 0
 
     def work(self, input_items, output_items):
@@ -91,7 +90,7 @@ class gps_probe_e310(gr.sync_block):
                 gpsd_socket.close()
         else:
             time = datetime.now()
-            self.curr_time = time.seconds()
+            self.curr_time = time.second()
 
         if self.prev_time == self.curr_time:
             d['Latitude'] = self.lat
