@@ -82,7 +82,7 @@ class gps_probe_e310(gr.sync_block):
                         d['Latitude'] = data_stream.TPV['lat']
                         d['Longitude'] = data_stream.TPV['lon']
                         self.lat = data_stream.TPV['lat']
-                        self.lon = data_stream.TPV['lat']
+                        self.lon = data_stream.TPV['lon']
                         self.prev_time = self.curr_time
                         break
 
